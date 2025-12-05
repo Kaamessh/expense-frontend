@@ -55,7 +55,7 @@ function AppInner() {
         <div style={{ display:'flex', alignItems:'center', gap:16 }}>
           <LogoE />
           <div>
-            <h1 style={{ margin:0 }}>Expense Tracker</h1>
+            <h1 style={{ margin:0 }}>Expense Tracker • v2</h1>
             <div className="subtitle">Track spending with a sleek neon dashboard</div>
           </div>
         </div>
