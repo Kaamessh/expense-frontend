@@ -54,21 +54,22 @@ function AppInner() {
       <section className="hero" style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
         <div style={{ display:'flex', alignItems:'center', gap:16 }}>
           <LogoE />
-          {token && <ProfileBadge api={API} token={token} />}
           <div>
             <h1 style={{ margin:0 }}>Expense Tracker</h1>
             <div className="subtitle">Track spending with a sleek neon dashboard</div>
           </div>
         </div>
-        <div className="subtitle">Track spending with a sleek neon dashboard</div>
-        <div className="nav">
-          {!token ? (
-            <button className="btn">About</button>
-          ) : (
-            <button className="btn" onClick={() => { setToken(''); localStorage.removeItem('token'); }}>Logout</button>
-          )}
-          <Link className="btn" to="/expenses">Expenses</Link>
-          <Link className="btn" to="/dashboard">Dashboard</Link>
+        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+          <div className="nav" style={{ margin:0 }}>
+            {!token ? (
+              <button className="btn">About</button>
+            ) : (
+              <button className="btn" onClick={() => { setToken(''); localStorage.removeItem('token'); }}>Logout</button>
+            )}
+            <Link className="btn" to="/expenses">Expenses</Link>
+            <Link className="btn" to="/dashboard">Dashboard</Link>
+          </div>
+          {token && <ProfileBadge api={API} token={token} />}
         </div>
       </section>
       <Routes>
