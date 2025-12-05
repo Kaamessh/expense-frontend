@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, Link } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
@@ -13,7 +13,7 @@ import LogoE from './components/LogoE';
 
 const API = (typeof window !== 'undefined' && window.location && window.location.port === '3000')
   ? ''
-  : (process.env.REACT_APP_API || 'http://localhost:4000');
+  : (process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_API || 'http://localhost:4000');
 
 function BackButton() {
   const navigate = useNavigate();
@@ -67,8 +67,8 @@ function AppInner() {
           ) : (
             <button className="btn" onClick={() => { setToken(''); localStorage.removeItem('token'); }}>Logout</button>
           )}
-          <a className="btn" href="/expenses">Expenses</a>
-          <a className="btn" href="/dashboard">Dashboard</a>
+          <Link className="btn" to="/expenses">Expenses</Link>
+          <Link className="btn" to="/dashboard">Dashboard</Link>
         </div>
       </section>
       <Routes>
