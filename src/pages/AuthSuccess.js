@@ -15,7 +15,7 @@ export default function AuthSuccess({ api, onToken }) {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await res.json().catch(() => ({}));
-        if (data && data.name && data.name.trim()) {
+            if (data && data.name && data.name.trim()) {
           window.location.replace('/');
         } else {
           window.location.replace('/set-username');

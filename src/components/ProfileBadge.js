@@ -27,7 +27,9 @@ export default function ProfileBadge({ api, token }) {
     fetchMe();
   }, [api, token]);
 
-  const initials = profile?.name && profile.name.trim() ? profile.name.split(' ').map(p => p[0]).join('').slice(0,2).toUpperCase() : (profile?.email ? profile.email[0].toUpperCase() : 'U');
+  const initials = profile?.name && profile.name.trim()
+    ? profile.name.trim()[0].toUpperCase()
+    : (profile?.email ? profile.email[0].toUpperCase() : 'U');
 
   return (
     <div style={{ position:'relative' }}>

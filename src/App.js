@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import AuthForm from './components/AuthForm';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
 import Dashboard from './components/Dashboard';
 import AuthSuccess from './pages/AuthSuccess';
 import SetUsername from './pages/SetUsername';
+import ExpensesPage from './pages/Expenses';
+import DashboardPage from './pages/Dashboard';
 import ProfileBadge from './components/ProfileBadge';
 import LogoE from './components/LogoE';
 
@@ -12,7 +15,16 @@ const API = (typeof window !== 'undefined' && window.location && window.location
   ? ''
   : (process.env.REACT_APP_API || 'http://localhost:4000');
 
-export default function App() {
+function BackButton() {
+  const navigate = useNavigate();
+  return (
+    <button className="btn" onClick={() => navigate(-1)} aria-label="Back" title="Back" style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+      <span style={{ display:'inline-block', transform:'translateY(-1px)' }}>←</span> Back
+    </button>
+  );
+}
+
+function AppInner() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [expenses, setExpenses] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
@@ -35,16 +47,7 @@ export default function App() {
     if (token) fetchExpenses();
   }, [token]);
 
-  // Route-less handling for /auth/success
-  if (typeof window !== 'undefined' && window.location) {
-    const path = window.location.pathname;
-    if (path === '/auth/success') {
-      return <AuthSuccess api={API} onToken={(t) => setToken(t)} />;
-    }
-    if (path === '/set-username') {
-      return <SetUsername api={API} onDone={() => window.location.replace('/')} />;
-    }
-  }
+  // Router-based pages
 
   return (
     <div className="app">
@@ -64,33 +67,48 @@ export default function App() {
           ) : (
             <button className="btn" onClick={() => { setToken(''); localStorage.removeItem('token'); }}>Logout</button>
           )}
-          <a className="btn" href="#expenses">Expenses</a>
-          <a className="btn" href="#dashboard">Dashboard</a>
+          <a className="btn" href="/expenses">Expenses</a>
+          <a className="btn" href="/dashboard">Dashboard</a>
         </div>
       </section>
-
-      {!token ? (
-        <div className="grid">
-          <div className="card">
-            <AuthForm api={API} onAuth={(t) => setToken(t)} />
-          </div>
-        </div>
-      ) : (
-        <div className="grid">
-          <div className="card" id="expenses">
-            <h2 className="section-title"><span className="badge">New</span> Add Expense</h2>
-            <ExpenseForm api={API} token={token} onAdded={() => fetchExpenses(pagination.page)} />
-          </div>
-          <div className="card">
-            <h2 className="section-title">Expenses</h2>
-            <ExpenseList items={expenses} page={pagination.page} pages={pagination.pages} onPage={(p) => fetchExpenses(p)} />
-          </div>
-          <div className="card" id="dashboard">
-            <h2 className="section-title">Dashboard</h2>
-            <Dashboard api={API} token={token} />
-          </div>
-        </div>
-      )}
+      <Routes>
+        <Route path="/" element={
+          !token ? (
+            <div className="grid">
+              <div className="card">
+                <AuthForm api={API} onAuth={(t) => setToken(t)} />
+              </div>
+            </div>
+          ) : (
+            <div className="grid">
+              <div className="card">
+                <h2 className="section-title"><span className="badge">New</span> Add Expense</h2>
+                <ExpenseForm api={API} token={token} onAdded={() => fetchExpenses(pagination.page)} />
+              </div>
+              <div className="card">
+                <h2 className="section-title">Expenses</h2>
+                <ExpenseList items={expenses} page={pagination.page} pages={pagination.pages} onPage={(p) => fetchExpenses(p)} />
+              </div>
+              <div className="card">
+                <h2 className="section-title">Dashboard</h2>
+                <Dashboard api={API} token={token} />
+              </div>
+            </div>
+          )
+        } />
+        <Route path="/auth/success" element={<AuthSuccess api={API} onToken={(t) => setToken(t)} />} />
+        <Route path="/set-username" element={<><BackButton /><SetUsername api={API} onDone={() => window.location.replace('/')} /></>} />
+        <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
+        <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
+      </Routes>
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AppInner />
+    </BrowserRouter>
   );
 }
