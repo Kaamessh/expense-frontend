@@ -16,14 +16,7 @@ const API = (typeof window !== 'undefined' && window.location && window.location
   ? ''
   : (process.env.REACT_APP_BACKEND_URL || process.env.REACT_APP_API || 'http://localhost:4000');
 
-function BackButton() {
-  const navigate = useNavigate();
-  return (
-    <button className="btn" onClick={() => navigate(-1)} aria-label="Back" title="Back" style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
-      <span style={{ display:'inline-block', transform:'translateY(-1px)' }}>←</span> Back
-    </button>
-  );
-}
+// Using shared BackButton component from components/BackButton
 
 function AppInner() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
