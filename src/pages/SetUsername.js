@@ -19,11 +19,24 @@ export default function SetUsername({ api, onDone }) {
       });
       const data = await res.json().catch(() => ({ error: 'Invalid JSON response' }));
       if (!res.ok) return setError(data.error || 'Request failed');
-      onDone && onDone(data);
+      // On success, go to the main page
+      if (typeof onDone === 'function') onDone(data);
+      window.location.replace('/#/');
     } catch (err) {
       setError('Network error: failed to reach server');
     }
   };
+
+  // If no token is present, send user to home to initiate login
+  if (!token) {
+    setTimeout(() => window.location.replace('/#/'), 0);
+    return (
+      <div className="card" style={{ padding: 24 }}>
+        <h2>Missing token</h2>
+        <div>Redirecting to home…</div>
+      </div>
+    );
+  }
 
   return (
     <div>
