@@ -12,6 +12,9 @@ import ExpensesPage from './pages/Expenses';
 import DashboardPage from './pages/Dashboard';
 import ProfileBadge from './components/ProfileBadge';
 import LogoE from './components/LogoE';
+import SettingsPage from './pages/Settings';
+import { SettingsProvider } from './settings/SettingsContext';
+import { I18nProvider } from './i18n';
 
 const API = (typeof window !== 'undefined' && window.location && window.location.port === '3000')
   ? ''
@@ -62,6 +65,7 @@ function AppInner() {
             )}
             <Link className="btn" to="/expenses">Expenses</Link>
             <Link className="btn" to="/dashboard">Dashboard</Link>
+            <Link className="btn" to="/settings">Settings</Link>
           </div>
           {token && <ProfileBadge api={API} token={token} />}
         </div>
@@ -91,6 +95,7 @@ function AppInner() {
         <Route path="/set-username" element={<div style={{ position:'relative' }}><BackButton /><HomeButton /><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></div>} />
         <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
         <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Routes>
     </div>
   );
@@ -98,8 +103,12 @@ function AppInner() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <AppInner />
-    </HashRouter>
+    <SettingsProvider>
+      <I18nProvider>
+        <HashRouter>
+          <AppInner />
+        </HashRouter>
+      </I18nProvider>
+    </SettingsProvider>
   );
 }

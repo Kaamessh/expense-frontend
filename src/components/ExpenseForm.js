@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { useSettings } from '../settings/SettingsContext';
 
+// Shows currency symbol from settings; defaults to INR
 export default function ExpenseForm({ api, token, onAdded }) {
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [date, setDate] = useState('');
   const [error, setError] = useState('');
+  const { settings } = useSettings();
+  const symbol = settings?.currency?.symbol || '₹';
 
   const submit = async (e) => {
     e.preventDefault();
@@ -24,7 +28,11 @@ export default function ExpenseForm({ api, token, onAdded }) {
   return (
     <div>
       <form onSubmit={submit} className="form" style={{ maxWidth: 520 }}>
-        <input className="input" type="number" step="0.01" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+        {/* Amount input with dynamic currency symbol */}
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <span aria-hidden="true" style={{ fontWeight:600 }}>{symbol}</span>
+          <input className="input" type="number" step="0.01" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+        </div>
         <input className="input" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} required />
         <input className="input" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
         <input className="input" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
