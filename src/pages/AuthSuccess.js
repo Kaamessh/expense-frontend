@@ -3,7 +3,11 @@ import React, { useEffect } from 'react';
 // Reads token from URL, stores it, and redirects to the main dashboard
 export default function AuthSuccess({ api, onToken }) {
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token');
+    // With HashRouter, token is in the hash part: /#/auth/success?token=...
+    const hashQuery = (typeof window !== 'undefined' && window.location && window.location.hash.includes('?'))
+      ? window.location.hash.split('?')[1]
+      : '';
+    const token = new URLSearchParams(hashQuery || window.location.search).get('token');
     if (token) {
       localStorage.setItem('token', token);
       if (typeof onToken === 'function') onToken(token);
