@@ -1,0 +1,103 @@
+.overlay {
+  position: fixed;
+  pointer-events: none; /* allow buttons to be individually interactive */
+  z-index: 1000; /* above headers/cards */
+}
+
+.hidden {
+  opacity: 0;
+  transition: opacity 180ms ease;
+}
+
+.backButton,
+.homeButton {
+  pointer-events: auto;
+  position: fixed;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, rgba(255,255,255,0.12));
+  border-radius: 10px;
+  background: var(--glass-bg, rgba(20,20,28,0.5));
+  backdrop-filter: blur(8px);
+  color: var(--text-color, #e6e6e6);
+  box-shadow: 0 6px 18px rgba(0, 200, 255, 0.18);
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 200ms ease;
+}
+
+.backButton:hover,
+.homeButton:hover {
+  transform: scale(0.98);
+  box-shadow: 0 8px 24px rgba(0, 200, 255, 0.32);
+}
+
+.backButton:focus-visible,
+.homeButton:focus-visible {
+  outline: 2px solid var(--accent-color, #00d0ff);
+  outline-offset: 2px;
+}
+
+/* Light theme variants (fallback) */
+:root.light .backButton,
+:root.light .homeButton {
+  background: rgba(255, 255, 255, 0.65);
+  color: #1b1b1b;
+  border-color: rgba(0,0,0,0.12);
+  box-shadow: 0 6px 18px rgba(0, 140, 255, 0.18);
+}
+
+.backIcon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.backLabel {
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+/* Compact on small screens: icon-only Back */
+@media (max-width: 600px) {
+  .backLabel {
+    display: none;
+  }
+  .backButton {
+    padding: 12px; /* larger touch target */
+  }
+}
+
+.homeButton {
+  border-radius: 9999px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+}
+
+.homeIcon {
+  font-size: 20px;
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--accent-color, #00d0ff);
+  color: #0b0b12;
+  border-radius: 9999px;
+  font-size: 10px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px var(--glass-bg, rgba(20,20,28,0.8));
+}
+
+/* Large screens: rail positioning idea (optional) */
+@media (min-width: 1440px) {
+  /* Could move buttons slightly further from corners for balance */
+}

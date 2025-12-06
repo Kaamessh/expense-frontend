@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, useNavigate, Link } from 'react-router-dom';
-import BackButton from './components/BackButton';
-import HomeButton from './components/HomeButton';
+// BackButton and HomeButton will be replaced by floating TopControls
+import TopControls from './components/TopControls';
 import AuthForm from './components/AuthForm';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
@@ -48,10 +48,11 @@ function AppInner() {
 
   return (
     <div className="app">
+      {/* Floating controls positioned outside the header with fixed overlay */}
+      <TopControls homeRoute="/" backButtonOffset={{ top: 12, left: 12 }} homeButtonOffset={{ top: 12, right: 12 }} autoHideOnScroll={false} />
       <section className="hero" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', position:'relative' }}>
         <div style={{ display:'flex', alignItems:'center', gap:16, position:'relative' }}>
-          {/* Back near the top-left E logo */}
-          <BackButton />
+          {/* Back is handled by TopControls (floating) */}
           <LogoE />
           <div>
             <h1 style={{ margin:0 }}>Expense Tracker • v2</h1>
@@ -69,10 +70,7 @@ function AppInner() {
             <Link className="btn" to="/dashboard">Dashboard</Link>
             <Link className="btn" to="/settings">Settings</Link>
           </div>
-          {/* Home at top-right above username */}
-          <div style={{ position:'absolute', top:0, right:140 }}>
-            <HomeButton />
-          </div>
+          {/* Home is handled by TopControls (floating) */}
           {token && <ProfileBadge api={API} token={token} />}
         </div>
       </section>
@@ -98,7 +96,7 @@ function AppInner() {
           )
         } />
         <Route path="/auth/success" element={<AuthSuccess api={API} onToken={(t) => setToken(t)} />} />
-        <Route path="/set-username" element={<div style={{ position:'relative' }}><BackButton /><HomeButton /><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></div>} />
+        <Route path="/set-username" element={<div style={{ position:'relative' }}><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></div>} />
         <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
         <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
         <Route path="/settings" element={<SettingsPage />} />
