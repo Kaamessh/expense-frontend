@@ -1,16 +1,15 @@
 import React from 'react';
 import Dashboard from '../components/Dashboard';
+import BackButton from '../components/BackButton';
 
 export default function DashboardPage({ api, token }) {
   if (!token) return (
     <div className="card"><h2>Login required</h2><div>Please log in to view the dashboard.</div></div>
   );
   return (
-    <div className="grid">
-      <button className="btn" onClick={() => window.history.back()} aria-label="Back" title="Back" style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
-        <span style={{ display:'inline-block', transform:'translateY(-1px)' }}>←</span> Back
-      </button>
-      <div className="card">
+    <div className="grid" style={{ position:'relative' }}>
+      <BackButton />
+      <div className="card" style={{ width:'100%' }}>
         <h2 className="section-title">Dashboard</h2>
         <Dashboard api={api} token={token} />
       </div>

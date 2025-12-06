@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { HashRouter, Routes, Route, useNavigate, Link } from 'react-router-dom';
+import BackButton from './components/BackButton';
 import AuthForm from './components/AuthForm';
 import ExpenseForm from './components/ExpenseForm';
 import ExpenseList from './components/ExpenseList';
@@ -93,7 +94,7 @@ function AppInner() {
           )
         } />
         <Route path="/auth/success" element={<AuthSuccess api={API} onToken={(t) => setToken(t)} />} />
-        <Route path="/set-username" element={<><BackButton /><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></>} />
+        <Route path="/set-username" element={<div style={{ position:'relative' }}><BackButton /><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></div>} />
         <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
         <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
       </Routes>
