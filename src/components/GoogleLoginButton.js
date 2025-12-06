@@ -4,6 +4,7 @@ import React from 'react';
 // Use absolute backend URL to avoid CRA dev-server handling browser navigations.
 export default function GoogleLoginButton() {
   const apiBase =
+    process.env.REACT_APP_BACKEND_URL ||
     process.env.REACT_APP_API ||
     (typeof window !== 'undefined' && window.location && window.location.port === '3000'
       ? 'http://localhost:4000'

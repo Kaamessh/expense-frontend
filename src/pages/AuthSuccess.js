@@ -15,13 +15,15 @@ export default function AuthSuccess({ api, onToken }) {
           headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         });
         const data = await res.json().catch(() => ({}));
-            if (data && data.name && data.name.trim()) {
-          window.location.replace('/');
+        const hasName = !!(data && data.name && String(data.name).trim());
+        // Use HashRouter-friendly redirects
+        if (hasName) {
+          window.location.replace('/#/');
         } else {
-          window.location.replace('/set-username');
+          window.location.replace('/#/set-username');
         }
       } catch (_) {
-        window.location.replace('/');
+        window.location.replace('/#/');
       }
     };
     checkProfile();
