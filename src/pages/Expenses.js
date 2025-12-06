@@ -2,6 +2,7 @@ import React from 'react';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseList from '../components/ExpenseList';
 import BackButton from '../components/BackButton';
+import HomeButton from '../components/HomeButton';
 
 export default function ExpensesPage({ api, token, fetchExpenses, expenses, pagination }) {
   if (!token) return (
@@ -10,6 +11,7 @@ export default function ExpensesPage({ api, token, fetchExpenses, expenses, pagi
   return (
     <div className="grid" style={{ position:'relative' }}>
       <BackButton />
+      <HomeButton />
       <div className="card">
         <h2 className="section-title"><span className="badge">New</span> Add Expense</h2>
         <ExpenseForm api={api} token={token} onAdded={() => fetchExpenses(pagination.page)} />
