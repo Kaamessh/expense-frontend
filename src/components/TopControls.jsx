@@ -46,6 +46,26 @@ export default function TopControls({
 
   const unreadCount = useUnreadBadge();
 
+  // Detect current location for hiding Back on Home and tooltip state
+  const [isHome, setIsHome] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      // Works with HashRouter and regular paths
+      const hash = window.location.hash || '';
+      const path = hash.startsWith('#') ? hash.replace('#', '') : window.location.pathname;
+      // Normalize to route only, strip query
+      const route = (path || '/').split('?')[0];
+      setIsHome(route === homeRoute || route === '/' || route === '');
+    };
+    check();
+    window.addEventListener('hashchange', check);
+    window.addEventListener('popstate', check);
+    return () => {
+      window.removeEventListener('hashchange', check);
+      window.removeEventListener('popstate', check);
+    };
+  }, [homeRoute]);
+
   // Auto-hide on scroll (optional)
   const [hidden, setHidden] = useState(false);
   useEffect(() => {
@@ -96,6 +116,7 @@ export default function TopControls({
 
   return (
     <div className={`${styles.overlay} ${hidden ? styles.hidden : ''}`} aria-hidden={hidden}>
+      {!isHome && (
       <button
         type="button"
         className={styles.backButton}
@@ -109,6 +130,7 @@ export default function TopControls({
         <span className={styles.backIcon} aria-hidden>←</span>
         <span className={styles.backLabel}>Back</span>
       </button>
+      )}
 
       <button
         type="button"
@@ -117,7 +139,7 @@ export default function TopControls({
         onClick={homeHandler}
         onKeyDown={(e) => onKeyActivate(e, homeHandler)}
         aria-label="Go to Home"
-        title="Go to Home"
+        title={isHome ? 'You are on Home' : 'Go to Home'}
         role="button"
       >
         <span className={styles.homeIcon} aria-hidden>🏠</span>
