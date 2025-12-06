@@ -28,7 +28,6 @@ function AppInner() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [expenses, setExpenses] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, pages: 1, total: 0 });
-
   useEffect(() => {
     if (token) localStorage.setItem('token', token);
   }, [token]);
@@ -87,18 +86,14 @@ function AppInner() {
                 <ExpenseForm api={API} token={token} onAdded={() => fetchExpenses(pagination.page)} />
               </div>
               <div className="card">
-                <h2 className="section-title">Expenses</h2>
-                <ExpenseList items={expenses} page={pagination.page} pages={pagination.pages} onPage={(p) => fetchExpenses(p)} />
-              </div>
-              <div className="card">
-                <h2 className="section-title">Dashboard</h2>
-                <Dashboard api={API} token={token} />
+                <h2 className="section-title">Recent Expenses</h2>
+                <ExpenseList items={expenses.slice(0,5)} page={1} pages={1} onPage={() => {}} />
               </div>
             </div>
           )
         } />
         <Route path="/auth/success" element={<AuthSuccess api={API} onToken={(t) => setToken(t)} />} />
-        <Route path="/set-username" element={<><BackButton /><SetUsername api={API} onDone={() => window.location.replace('/')} /></>} />
+        <Route path="/set-username" element={<><BackButton /><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></>} />
         <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
         <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
       </Routes>
