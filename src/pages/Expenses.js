@@ -8,6 +8,9 @@ export default function ExpensesPage({ api, token, fetchExpenses, expenses, pagi
   );
   return (
     <div className="grid">
+      <button className="btn" onClick={() => window.history.back()} aria-label="Back" title="Back" style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
+        <span style={{ display:'inline-block', transform:'translateY(-1px)' }}>←</span> Back
+      </button>
       <div className="card">
         <h2 className="section-title"><span className="badge">New</span> Add Expense</h2>
         <ExpenseForm api={api} token={token} onAdded={() => fetchExpenses(pagination.page)} />
