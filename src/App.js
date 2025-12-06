@@ -48,15 +48,17 @@ function AppInner() {
 
   return (
     <div className="app">
-      <section className="hero" style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <div style={{ display:'flex', alignItems:'center', gap:16 }}>
+      <section className="hero" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', position:'relative' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:16, position:'relative' }}>
+          {/* Back near the top-left E logo */}
+          <BackButton />
           <LogoE />
           <div>
             <h1 style={{ margin:0 }}>Expense Tracker • v2</h1>
             <div className="subtitle">Track spending with a sleek neon dashboard</div>
           </div>
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:12 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12, position:'relative' }}>
           <div className="nav" style={{ margin:0 }}>
             {!token ? (
               <button className="btn">About</button>
@@ -66,6 +68,10 @@ function AppInner() {
             <Link className="btn" to="/expenses">Expenses</Link>
             <Link className="btn" to="/dashboard">Dashboard</Link>
             <Link className="btn" to="/settings">Settings</Link>
+          </div>
+          {/* Home at top-right above username */}
+          <div style={{ position:'absolute', top:0, right:140 }}>
+            <HomeButton />
           </div>
           {token && <ProfileBadge api={API} token={token} />}
         </div>
