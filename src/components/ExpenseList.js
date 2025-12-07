@@ -31,14 +31,14 @@ export default function ExpenseList({ items, page, pages, onPage }) {
           )}
         </tbody>
       </table>
-          <div style={{ marginTop: 8 }}>
-            <a className="btn" href="/#/expenses">View All</a>
+          <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+            <a className="btn" href="/#/expenses" style={{ flexShrink: 0 }}>View All</a>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <button className="btn" disabled={page <= 1} onClick={() => onPage(page - 1)}>Prev</button>
+              <span>Page {page} / {pages}</span>
+              <button className="btn" disabled={page >= pages} onClick={() => onPage(page + 1)}>Next</button>
+            </div>
           </div>
-      <div style={{ marginTop: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
-        <button className="btn" disabled={page <= 1} onClick={() => onPage(page - 1)}>Prev</button>
-        <span>Page {page} / {pages}</span>
-        <button className="btn" disabled={page >= pages} onClick={() => onPage(page + 1)}>Next</button>
-      </div>
     </div>
   );
 }
