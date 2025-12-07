@@ -9,15 +9,17 @@ export default function ExpenseForm({ api, token, onAdded }) {
   const [date, setDate] = useState('');
   const [error, setError] = useState('');
   const { settings } = useSettings();
-  // Currency selection: default to global setting, but save per-expense
-  const [currencyCode, setCurrencyCode] = useState(settings?.currency?.code || 'INR');
-  const currencySymbol = useMemo(() => {
-    switch (currencyCode) {
-      case 'USD': return '$';
-      case 'EUR': return '€';
-      case 'INR': default: return '₹';
-    }
-  }, [currencyCode]);
+  const defaultCode = settings?.currency?.code || 'INR';
+  const defaultSymbol = settings?.currency?.symbol || '₹';
+  const [currencyCode, setCurrencyCode] = useState(defaultCode);
+  const currencyMap = useMemo(() => ({
+    INR: '₹',
+    USD: '$',
+    EUR: '€',
+    GBP: '£',
+    JPY: '¥',
+  }), []);
+  const symbol = currencyMap[currencyCode] || defaultSymbol;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -25,7 +27,7 @@ export default function ExpenseForm({ api, token, onAdded }) {
     const res = await fetch(`${api}/api/v1/expenses`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ amount: Number(amount), category, description, date, currencyCode, currencySymbol })
+      body: JSON.stringify({ amount: Number(amount), category, description, date, currencyCode, currencySymbol: symbol })
     });
     const data = await res.json();
     if (!res.ok) return setError(data.error || 'Request failed');
@@ -36,19 +38,18 @@ export default function ExpenseForm({ api, token, onAdded }) {
   return (
     <div>
       <form onSubmit={submit} className="form" style={{ maxWidth: 520 }}>
-        {/* Amount input with dynamic currency symbol */}
+        {/* Currency selection and Amount input; currency affects only this entry */}
         <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-          <span aria-hidden="true" style={{ fontWeight:600 }}>{currencySymbol}</span>
-          <input className="input" type="number" step="0.01" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
-        </div>
-        {/* Currency dropdown (per-expense); changing this does not affect past expenses */}
-        <div>
-          <label htmlFor="currency" className="label">Currency</label>
-          <select id="currency" className="input" value={currencyCode} onChange={(e) => setCurrencyCode(e.target.value)} aria-label="Currency">
-            <option value="INR">INR (₹)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
+          <label className="sr-only" htmlFor="currency">Currency</label>
+          <select id="currency" className="input" aria-label="Currency" value={currencyCode} onChange={(e) => setCurrencyCode(e.target.value)} style={{ maxWidth: 120 }}>
+            <option value="INR">INR</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+            <option value="JPY">JPY</option>
           </select>
+          <span aria-hidden="true" style={{ fontWeight:600 }}>{symbol}</span>
+          <input className="input" type="number" step="0.01" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} required />
         </div>
         <input className="input" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} required />
         <input className="input" placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
