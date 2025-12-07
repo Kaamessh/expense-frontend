@@ -1,7 +1,10 @@
 import React from 'react';
+import { useSettings } from '../settings/SettingsContext';
 
 export default function ExpenseList({ items, page, pages, onPage }) {
-  return (
+    const { settings } = useSettings();
+    const symbol = settings?.currency?.symbol || '';
+    return (
     <div>
       <table className="table">
         <thead>
@@ -19,7 +22,7 @@ export default function ExpenseList({ items, page, pages, onPage }) {
               <td>{new Date(x.date).toLocaleDateString()}</td>
               <td>{x.category}</td>
               <td>{x.description}</td>
-              <td style={{ textAlign: 'right' }}>${x.amount.toFixed(2)}</td>
+                  <td style={{ textAlign: 'right' }}>{symbol}{Number(x.amount).toFixed(2)}</td>
                   <td>
                     {/* Chevron to open full details on Expenses page */}
                     <a href="/#/expenses" aria-label="View details" title="View details">›</a>
