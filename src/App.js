@@ -9,6 +9,7 @@ import Dashboard from './components/Dashboard';
 import AuthSuccess from './pages/AuthSuccess';
 import SetUsername from './pages/SetUsername';
 import ExpensesPage from './pages/Expenses';
+import AllExpenses from './pages/AllExpenses';
 import DashboardPage from './pages/Dashboard';
 import ProfileBadge from './components/ProfileBadge';
 import LogoE from './components/LogoE';
@@ -78,18 +79,18 @@ function AppInner() {
         <Route path="/" element={
           !token ? (
             <div className="grid">
-              <div className="card">
+              <div className="card" style={{ width:'100%' }}>
                 <AuthForm api={API} onAuth={(t) => setToken(t)} />
               </div>
             </div>
           ) : (
             <div className="grid">
-              <div className="card">
+              <div className="card" style={{ width:'100%' }}>
                 <h2 className="section-title"><span className="badge">New</span> Add Expense</h2>
                 <ExpenseForm api={API} token={token} onAdded={() => fetchExpenses(pagination.page)} />
               </div>
-              <div className="card">
-                <h2 className="section-title">Recent Expenses</h2>
+              <div className="card" style={{ width:'100%' }}>
+                <h2 className="section-title">Recent 5 Expenses</h2>
                 <ExpenseList items={expenses.slice(0,5)} page={1} pages={1} onPage={() => {}} />
               </div>
             </div>
@@ -97,7 +98,7 @@ function AppInner() {
         } />
         <Route path="/auth/success" element={<AuthSuccess api={API} onToken={(t) => setToken(t)} />} />
         <Route path="/set-username" element={<div style={{ position:'relative' }}><SetUsername api={API} onDone={() => window.location.replace('/#/')} /></div>} />
-        <Route path="/expenses" element={<ExpensesPage api={API} token={token} fetchExpenses={fetchExpenses} expenses={expenses} pagination={pagination} />} />
+        <Route path="/expenses" element={<AllExpenses api={API} token={token} />} />
         <Route path="/dashboard" element={<DashboardPage api={API} token={token} />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Routes>
