@@ -1,16 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import './styles/responsive.css';
+import registerSW from './serviceWorkerRegistration';
 
 const root = createRoot(document.getElementById('root'));
 root.render(<App />);
 
-// Register service worker (PWA)
-if ('serviceWorker' in navigator) {
-	window.addEventListener('load', () => {
-		navigator.serviceWorker.register('/service-worker.js')
-			.then((reg) => console.log('Service worker registered', reg.scope))
-			.catch((err) => console.warn('Service worker registration failed', err));
-	});
-}
+// Register service worker for PWA install (no UI changes)
+registerSW();
